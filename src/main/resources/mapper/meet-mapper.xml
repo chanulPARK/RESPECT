@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="meet">
+	
+	<resultMap type="map" id="meetMap"></resultMap>
+	<select id="selectMeetList" resultMap="meetMap">
+		select * from meet
+	</select>
+	
+	<select id="selectTotalCount" resultType="_int">
+		select count(*) from meet
+	</select>
+	
+</mapper>
