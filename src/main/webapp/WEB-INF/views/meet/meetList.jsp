@@ -9,7 +9,6 @@
 <jsp:include page="/WEB-INF/views/common/header.jsp"></jsp:include>
 
 
-
 <head>
 
 <title>번개리스트</title>
@@ -25,10 +24,9 @@
 
 <link href="${path }/resources/css/datepicker.css" rel="stylesheet" type="text/css">
 <link href="${path }/resources/css/datepicker.min.css" rel="stylesheet" type="text/css">
-<script src="${path }/resources/js/datepicker.min.js"></script>
-
+<script src="${path }/resources/js/datepicker.min.js" type="text/javascript"></script>
 <!-- Include English language -->
-<script src="${path }/resources/js/i18n/datepicker.en.js"></script>
+<script src="${path }/resources/js/i18n/datepicker.en.js" type="text/javascript"></script>
 
 
 
@@ -98,15 +96,17 @@
 								<i class="fa fa-close" style="font-size: 30px"></i>
 							</a>
 						</div>
+						
 						<div style="height: 10%; display: inline-block;padding-left:10px;">
 							<br>
 							<h5 class="">더 재미있는 제주도 여행을 위해..</h5>
 							<div class="justify-content-center" align='center'>							
 								<button class="btn btn-block"
-									onclick="location.href='${path}/meet/meetForm.do'" style="width: 60%;">글쓰기</button>
+									onclick="writeMeet();" style="width: 60%;">글쓰기</button>
 							</div>
 							<br>
 						</div>
+						
 					</li>
 					<li class="sidebar-brand" style="background:#ef8321; text-align:center;padding-top:15px;">
 						<h4>
@@ -114,13 +114,13 @@
 						</h4>
 					</li>
 					<li>
-						<form action="" accept-charset="UTF-8">
+						<form action="${path }/meet/searchMeet.do" accept-charset="UTF-8">
 							<ul>
 								<li>
 									<h5>기간</h5>
 									<div class="form-group row">
 					                	<div class="col-sm-10">
-					                		<input type="text"
+					                		<input type="text" name="daterange"
 											    data-range="true"
 											    data-multiple-dates-separator=" - "
 											    data-language="en"
@@ -135,7 +135,7 @@
 										placeholder="주소를 입력해주세요." style="width: 70%;"> 
 									&nbsp;
 									<div class="form-inline">
-										<input type="button" class="btn" onclick="" style="width: 30%;" value="검색">
+										<input type="submit" class="btn" style="width: 30%;" value="검색">
 										&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 										<input type="reset" class="btn" style="width: 30%;" value="취소">
 									</div>
@@ -151,7 +151,7 @@
 		</div>
 		<!-- /#sidebar-wrapper -->
 		<!-- Page Content -->
-		<div id="page-content-wrapper" class="">
+		<div id="page-content-wrapper">
 			<div class="container">
 				<a href="#menu-toggle" class="btn btn-primary" id="menu-toggle">필터설정</a>
 			</div>
@@ -161,7 +161,7 @@
 	            <div class="col-lg-7 col-md-7">
 	                <br>
 	                <a href="#" onclick="location.href='${path}/meet/meetView.do?meetNo=${meet.meetNo }'">
-	                    <img class="img-thumbnail" src="http://placehold.it/500x300" alt="" style="margin-top:50px;">
+	                    <img class="img-thumbnail" src="http://placehold.it/500x300" alt="" style="margin-top:30px;">
 	                </a>
 	            </div>
 	            <div class="col-lg-5 col-md-5" class="justify-content-center" align='center'>
@@ -171,8 +171,7 @@
 					닉네임 : <input type="text" readonly="readonly"><br /><br /> 
 					성별 : <input type="text" readonly="readonly"><br /><br /> 
 					나이 : <input type="text" readonly="readonly"><br /><br /> 
-					기간 : <input type="text" readonly="readonly"><br /><br /> 
-					좋아요 : <input type="text" readonly="readonly"><br><br>
+					기간 : <input type="text" readonly="readonly"><br /><br />
 	                <a class="btn btn-primary" href="#" onclick="location.href='${path}/meet/meetView.do?meetNo=${meet.meetNo }'">
 	                	<span class="glyphicon glyphicon-chevron-right">상세보기</span>
                 	</a>
@@ -200,7 +199,19 @@
 	//$('#my-element').datepicker([options]);
 	// Access instance of plugin
 	$('#my-element').data('datepicker');
- 		
+	
+	function writeMeet()
+	{
+		/* if(${userLoggedIn}!=null){
+			alert("로그인 후 이용 가능합니다.");
+		}else{
+			location.href='${path}/meet/meetForm.do';
+		} */
+		location.href='${path}/meet/meetForm.do';
+	}
+	
+	
+	
 </script>
 	
 	

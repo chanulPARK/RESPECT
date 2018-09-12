@@ -64,7 +64,6 @@
 				   	<div class="col-sm-3">
 				       	<input type="text" class="form-control">
 				    </div>
-				    
 				</div>
 			</div>
 			<div class="card-body">

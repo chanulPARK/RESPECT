@@ -2,8 +2,11 @@ package com.kh.respect.meet.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Enumeration;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -17,13 +20,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.kh.respect.common.Page;
 import com.kh.respect.meet.model.service.MeetService;
-import com.oreilly.servlet.MultipartRequest;
-import com.oreilly.servlet.multipart.DefaultFileRenamePolicy;
+import com.kh.respect.meet.model.vo.Meet;
 
 
 
@@ -47,6 +48,32 @@ public class MeetController {
 		
 		mv.addObject("list", list);
 		mv.addObject("pagebar", Page.getPage(cPage, numPerPage, totalCount, "meetList.do"));
+		mv.addObject("totalCount", totalCount);
+		mv.setViewName("meet/meetList");
+		
+		return mv;
+	}
+	
+	@RequestMapping("/meet/searchMeet.do")
+	public ModelAndView searchMeet(@RequestParam(value="cPage", required=false, defaultValue="1") int cPage,
+								   @RequestParam(value="daterange") String range,
+							 	   @RequestParam(value="area") String area) throws Exception
+	{
+		ModelAndView mv = new ModelAndView();
+		System.out.println(range);
+		
+		String start = range.substring(0, 10);
+		System.out.println(start);
+		String end = range.substring(13);
+		System.out.println(end);
+		
+		int numPerPage = 10;
+		
+		List<Map<String,String>> list = service.searchMeetList(cPage, numPerPage, start, end, area);
+		int totalCount=service.selectTotalCount();
+		
+		mv.addObject("list", list);
+		mv.addObject("pagebar", Page.getPage(cPage, numPerPage, totalCount, "meetList.do"));
 		mv.setViewName("meet/meetList");
 		
 		return mv;
@@ -58,41 +85,39 @@ public class MeetController {
 		return "/meet/meetForm";
 	}
 	
-	@RequestMapping()
-	public String selectOne()
+	@RequestMapping(value="/meet/meetFormEnd.do", method = RequestMethod.POST)
+	public ModelAndView selectOne(@RequestParam(value="title") String title,
+								  @RequestParam(value="area") String area,
+								  @RequestParam(value="address") String address,
+								  @RequestParam(value="userId") String userId,
+								  @RequestParam(value="meetDate") Date meetDate,
+								  @RequestParam(value="meetTime") String meetTime,
+								  @RequestParam(value="content") String content)
 	{
-		return "";
+		ModelAndView mv = new ModelAndView();
+		
+		Meet meet = new Meet(0, userId, area, title, content, meetDate, meetTime, address, 0, 0, null);
+		
+		int result = service.insertMeet(meet);
+		System.out.println(result);
+		
+		mv.setViewName("meet/meetList");
+		
+		return mv;
 	}
 	
+	
 	@RequestMapping(value="/imageUpload.do", method = RequestMethod.POST)
-	public void imageUpload(@RequestParam (value="files") MultipartFile[] files, HttpServletRequest request) throws IOException
+	public ModelAndView imageUpload(MultipartFile[] uploadFile, HttpServletRequest request) throws IOException
 	{
-		logger.debug("request : "+request);
+		System.out.println(uploadFile[0]);
+		System.out.println(uploadFile[1]);
+		
 		ModelAndView mv = new ModelAndView();
-		System.out.println(files);
-		logger.debug("파일이름 : "+files);
-		MultipartHttpServletRequest mt = (MultipartHttpServletRequest)request;
-		System.out.println(mt);
-		String fileName = ""; // 파일명
 		
 		String saveDir = request.getSession().getServletContext().getRealPath("/resources/uploadImg");
-		int size = 10*1024*1024; //업로드 사이즈 제한 10MB이하
-		MultipartRequest multi = new MultipartRequest(request, saveDir, size, "utf-8", new DefaultFileRenamePolicy());
 		
-		
-		
-		Enumeration filen = multi.getFileNames();
-		String file = (String)filen.nextElement();
-		fileName = multi.getFilesystemName(file);
-		
-		System.out.println(fileName);
-		
-		//List<MeetAttachment> attList = new ArrayList();
-		
-		logger.debug("multi :: "+multi);
-		logger.debug("file :: "+file);
-		logger.debug("fileName :: "+fileName);
-		
+		List<String> attList = new ArrayList();
 		
 		File dir = new File(saveDir);
 		// 폴더가 없을경우 생성
@@ -101,7 +126,7 @@ public class MeetController {
 			dir.mkdirs();
 		}
 		
-		/*for(MultipartFile f : files)
+		for(MultipartFile f : uploadFile)
 		{
 			if(!f.isEmpty())
 			{
@@ -119,19 +144,12 @@ public class MeetController {
 				{
 					e.printStackTrace();
 				}
-				BungAttachment battach = new BungAttachment();
-				battach.setOriginName(originName);
-				battach.setRenamed(renamed);
-				attList.add(battach);
+				attList.add(renamed);
 			}
-		}*/
-		
-		/*mv.addObject(attList);
+		}
+		mv.addObject("list",attList);
 		mv.setViewName("jsonView");
 		
-		return mv;*/
-		
+		return mv;      
 	}
-	
-	
 }

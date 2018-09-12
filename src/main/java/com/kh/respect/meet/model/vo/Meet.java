@@ -10,7 +10,7 @@ public class Meet {
 	private String title;
 	private String content;
 	private Date meetDate;
-	private String time;
+	private String meetTime;
 	private String address;
 	private int hitsCount;
 	private int replyCount;
@@ -18,7 +18,7 @@ public class Meet {
 	
 	public Meet() {}
 
-	public Meet(int meetNo, String userId, String area, String title, String content, Date meetDate, String time,
+	public Meet(int meetNo, String userId, String area, String title, String content, Date meetDate, String meetTime,
 			String address, int hitsCount, int replyCount, Date writeDate) {
 		super();
 		this.meetNo = meetNo;
@@ -27,7 +27,7 @@ public class Meet {
 		this.title = title;
 		this.content = content;
 		this.meetDate = meetDate;
-		this.time = time;
+		this.meetTime = meetTime;
 		this.address = address;
 		this.hitsCount = hitsCount;
 		this.replyCount = replyCount;
@@ -82,12 +82,12 @@ public class Meet {
 		this.meetDate = meetDate;
 	}
 
-	public String getTime() {
-		return time;
+	public String getMeetTime() {
+		return meetTime;
 	}
 
-	public void setTime(String time) {
-		this.time = time;
+	public void setMeetTime(String meetTime) {
+		this.meetTime = meetTime;
 	}
 
 	public String getAddress() {
@@ -125,9 +125,11 @@ public class Meet {
 	@Override
 	public String toString() {
 		return "Meet [meetNo=" + meetNo + ", userId=" + userId + ", area=" + area + ", title=" + title + ", content="
-				+ content + ", meetDate=" + meetDate + ", time=" + time + ", address=" + address + ", hitsCount="
-				+ hitsCount + ", replyCount=" + replyCount + ", writeDate=" + writeDate + "]";
+				+ content + ", meetDate=" + meetDate + ", meetTime=" + meetTime + ", address=" + address
+				+ ", hitsCount=" + hitsCount + ", replyCount=" + replyCount + ", writeDate=" + writeDate + "]";
 	}
+
+	
 	
 	
 	

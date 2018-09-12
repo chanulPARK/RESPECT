@@ -48,68 +48,43 @@
             lang : 'ko-KR', // default: 'en-US'
       		callbacks : {
       			onImageUpload : function(files, editor, welEditable){
-      				alert(files[0]);
-      				console.log(editor);
-      				console.log(welEditable);
-      				
-      				sendFile(files[0], editor, welEditable);
+      				sendFile(files, editor, welEditable);
       			}
       		}
   	    });
   	});
 	
 	function sendFile(file, editor, welEditable){
-		
-		data = new FormData();
-		data.append("uploadFile", file);
-		console.log(data);
-		$.ajax({
-			data:data,
-			url:"${path}/imageUpload.do",
-			type:"POST",
-			cache:false,
-			contentType:false,
-			processData:false,
-			success:function(data){
-				//$image.attr('src', url + filename);
-				$(editor).summernote('editor.insertImage', data.url, files);
-				//editor.insertImage(welEditable, data.url);
-			}
-		});
+	    data = new FormData();
+	    console.log(file);
+	    for(var i=0;i<file.length;i++){
+	       data.append("uploadFile", file[i]);
+	    }
+	    console.log(data.getAll('uploadFile'));
+	    $.ajax({
+	       data:data,
+	       url:"${path}/imageUpload.do",
+	       type:"POST",
+	       cache:false,
+	       contentType:false,
+	       processData:false,
+	       success:function(data){
+	          console.log(data.list);
+	          //console.log($image);
+	          for(var i=0;i<data.list.length;i++)
+	          {
+	             //$('#test').append('<img src=/resources/uploadImg/'+data.list[i]+'>');         
+	             $('#summernote').summernote('insertImage', "../resources/uploadImg/"+data.list[i],data.list[i]);
+	             
+	          }
+	       }
+	    });
 	}
-	/* function sendFile(file, editor) {
-        // 파일 전송을 위한 폼생성
- 		data = new FormData();
- 	    data.append("uploadFile", file);
- 	    $.ajax({ // ajax를 통해 파일 업로드 처리
- 	        data : data,
- 	        type : "POST",
- 	        url : "./summernote_imageUpload.jsp",
- 	        cache : false,
- 	        contentType : false,
- 	        processData : false,
- 	        success : function(data) { // 처리가 성공할 경우
-                // 에디터에 이미지 출력
- 	        	$(editor).summernote('editor.insertImage', data.url);
- 	        }
- 	    });
- 	}
-	$(document).ready(function() {
-        $('#summernote').summernote({ // summernote를 사용하기 위한 선언
-            height: 400,
-			callbacks: { // 콜백을 사용
-                // 이미지를 업로드할 경우 이벤트를 발생
-			    onImageUpload: function(files, editor, welEditable) {
-				    sendFile(files[0], this);
-				}
-			}
-		});
-	}); */
 	
 	
 	//datepicker
 	// Initialization
-	$('#my-element').datepicker([options]);
+	//$('#my-element').datepicker([options]);
 	// Access instance of plugin
 	$('#my-element').data('datepicker');
 	
@@ -121,11 +96,11 @@
 		<div class="card mb-4">
 	        <div class="card-header bg-white font-weight-bold">번개모집</div>
 	        <div class="card-body">
-	            <form action="" enctype="multipart/form-data" method="POST" accept-charset="UTF-8" enctype="multipart/">
+	            <form action="${path }/meetFormEnd.do" enctype="multipart/form-data" method="POST" accept-charset="UTF-8">
 	                <div class="form-group row">
 	                    <label for="제목" class="col-sm-2 col-form-label">제목</label>
 	                    <div class="col-sm-8">
-	                        <input type="text" class="form-control" id="inputEmail3" placeholder="제목">
+	                        <input type="text" class="form-control" id="inputEmail3" name="title" placeholder="제목">
 	                    </div>
 	                </div>
 	                <div class="form-group row">
@@ -143,13 +118,13 @@
 	                <div class="form-group row">
 	                    <label for="inputPassword3" class="col-sm-2 col-form-label">작성자</label>
 	                    <div class="col-sm-3">
-	                        <input type="text" class="form-control" id="inputPassword3" placeholder="작성자">
+	                        <input type="text" class="form-control" id="writer" name="userId" placeholder="작성자" readonly="readonly">
 	                    </div>
 	                </div>
 					<div class="form-group row">
 					   	<label for="gender" class="col-sm-2 col-form-label">성별</label>
 					   	<div class="col-sm-3">
-					       	<!-- memberLoggedIn.gender -->
+					       	<input type="text" class="form-control" name="gender" placeholder="남/여" value="" readonly="readonly"> 
 					    </div>
 					</div>
 	              	
@@ -158,7 +133,13 @@
 	                	<label for="date" class="col-sm-2 col-form-label">날짜</label>
 	                	<div class="col-sm-3">
 	                		<input type='text' class='form-control datepicker-here' data-language='en' 
-	                		data-timepicker="true" data-time-format='hh:ii'/>
+	                		name="meetDate"/>
+	                	</div>
+	                </div>
+	                <div class="form-group row">
+	                	<label for="date" class="col-sm-2 col-form-label">시간</label>
+	                	<div class="col-sm-3">
+	                		<input type="time" class="form-control" name="time">
 	                	</div>
 	                </div>
 	                <!-- 썸머노트 에디터 사용 -->
